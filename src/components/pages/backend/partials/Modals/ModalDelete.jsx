@@ -2,8 +2,15 @@ import { Archive, Trash2, X } from "lucide-react";
 import React from "react";
 import ModalWrapper from "./ModalWrapper";
 import SpinnerButton from "../spinners/SpinnerButton";
+import { StoreContext } from "@/components/store/storeContext";
+import { setIsDelete } from "@/components/store/storeAction";
 
 const ModalDelete = () => {
+    const { store, dispatch } = React.useContext(StoreContext);
+    const handleClose = () => {
+      dispatch(setIsDelete(false));
+    };
+    
   return (
     <>
       <ModalWrapper>
@@ -11,7 +18,7 @@ const ModalDelete = () => {
           <div className="modal-header flex gap-2 p-2 items-center border-b border-line mb-2">
             <Archive size={16} stroke="red" />{" "}
             <span className="text-alert">Delete</span>
-            <button className="ml-auto">
+            <button className="ml-auto" onClick={handleClose}>
               <X />
             </button>
           </div>
@@ -24,8 +31,8 @@ const ModalDelete = () => {
               <button className="btn btn-alert">
                 <SpinnerButton /> Delete
               </button>
-              <button className="btn btn-cancel">
-                <SpinnerButton />
+              <button className="btn btn-cancel" onClick={handleClose}>
+                
                 Cancel
               </button>
             </div>

@@ -1,17 +1,22 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/pages/frontend/Home";
 import Movies from "./components/pages/backend/movies/Movies";
+import Settings from "./components/pages/backend/settings/settings";
+import { StoreProvider } from "./components/store/storeContext";
+import Homepage from "./components/pages/frontend/homepage/Homepage";
 
 const App = () => {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="/admin/movies" element={<Movies/>}/>
-        </Routes>
-      </Router>
+      <StoreProvider>
+        <Router>
+          <Routes>
+            <Route index element={<Homepage />} />
+            <Route path="/admin/movies" element={<Movies />} />
+            <Route path="/admin/settings" element={<Settings />} />
+          </Routes>
+        </Router>
+      </StoreProvider>
     </>
   );
 };
