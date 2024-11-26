@@ -53,7 +53,7 @@ const handleAdd = () => {
       {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
       {store.isAdd && <ModalAddMovie />}
-      {store.isView && <ModalViewMovie/>}
+      
     </>
   );
 };

@@ -8,8 +8,12 @@ import SliderMovie from "./SliderMovie";
 const Homepage = () => {
   return (
     <>
+      <Header />
       <Banner />
-      <SliderMovie/>
+      <div className=" py-24 mt-20 bg-dark">
+        <SliderMovie title="TV Shows" filter="TV Shows" />
+        <SliderMovie title="Western Movie" filter="Western Movie" />
+      </div>
     </>
   );
 };

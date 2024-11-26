@@ -4,23 +4,36 @@ import { imgPath } from "@/components/helpers/function-general";
 import { Play, Plus, ThumbsUp, X } from "lucide-react";
 import { setIsView } from "@/components/store/storeAction";
 import { StoreContext } from "@/components/store/storeContext";
+import { movies } from "./datamovies";
 
-const ModalViewMovie = () => {
+const ModalViewMovie = ({movieInfo}) => {
   const { store, dispatch } = React.useContext(StoreContext);
       const handleClose = () => {
         dispatch(setIsView(false));
       };
+
+      const [randomize, setRandomize] = React.useState([]);
+      React.useEffect(() => {
+        setRandomize(
+          movies
+            .map((value) => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value)
+        );
+      }, []);
+
+      console.log(movieInfo);
   return (
     <ModalWrapper>
       <div className="modal-main bg-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[800px] w-full rounded-md border border-line">
         <div className="modal-banner relative">
           <img
-            src={`${imgPath}/arcane.jpg`}
+            src={`${imgPath}/${movieInfo.movie_image}`}
             alt=""
             className="h-[350px] w-full object-cover"
           />
           <div className="absolute bottom-6 left-6 z-40">
-            <h3 className="mb-3">Arcane</h3>
+            <h3 className="mb-3">{movieInfo.movie_title}</h3>
             <ul className="flex gap-2 items-center">
               <li>
                 <button className="bg-dark flex gap-2 px-4 py-1.5 rounded-md text-light font-bold">
@@ -53,51 +66,56 @@ const ModalViewMovie = () => {
             <div className="">
               <ul className="flex gap-3 items-center text-xs mb-3">
                 <li className="border-[1px] border-dark py-[3px] px-2.5 text-[12px]">
-                  <span className="translate-y-[1px] block">16+</span>
+                  <span className="translate-y-[1px] block">
+                    {movieInfo.movie_rating}
+                  </span>
                 </li>
-                <li>2024</li>
-                <li>1hr 45mins</li>
+                <li>{movieInfo.movie_year}</li>
+                <li>{movieInfo.movie_duration}</li>
                 <li className="border-[1px] border-dark py-[0.5px] px-1.5 text-[9px]">
                   HD
                 </li>
               </ul>
               <p className="text-xs leading-relaxed">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Quibusdam possimus atque nemo similique ratione!
+                {movieInfo.movie_summary}
               </p>
             </div>
             <div className="space-y-3">
               <p className="text-xs leading-relaxed">
-                <span className="opacity-60">Cast:</span> Ella Purnell, Hailee
-                Steinfeld, Katie Leung, Kevin Alejandro
+                <span className="opacity-60">Cast:</span> {movieInfo.movie_cast}
               </p>
               <p className="text-xs leading-relaxed">
-                <span className="opacity-60 text-xs">Genre:</span> Action,
-                Fantasy, Steampunk
+                <span className="opacity-60 text-xs">Genre:</span>{" "}
+                {movieInfo.movie_genre}
               </p>
             </div>
           </div>
         </div>
         <div className="modal-more p-4">
           <div className="grid grid-cols-3 gap-5">
-            {Array.from(Array(3).keys()).map((i) => (
-              <div className="card rounded-md overflow-hidden">
+            {randomize.slice(1,4).map((item, key) => (
+              <div className="card rounded-md overflow-hidden" key={key}>
+                {" "}
                 <div className="relative">
                   <img
-                    src={`${imgPath}/wednesday.webp`}
+                    src={`${imgPath}/${item.movie_image}`}
                     alt=""
                     className="w-full object-cover h-[120px]"
                   />
-                  <p className="absolute top-3 right-3 z-40">1hr 5mins</p>
+                  <p className="absolute top-3 right-3 z-40">
+                    {item.movie_duration}
+                  </p>
                   <div className="tint bg-gradient-to-b from-[rgba(0,0,0,0.7)] to-transparent absolute top-0 left-0 w-full h-full"></div>
                 </div>
                 <div className="p-4 bg-secondary">
                   <div className="flex justify-between items-center mb-5">
                     <ul className="flex gap-3 items-center text-xs">
                       <li className="border-[1px] border-dark py-[3px] px-2.5 text-[12px]">
-                        <span className="translate-y-[1px] block">16+</span>
+                        <span className="translate-y-[1px] block">
+                          {item.movie_rating}
+                        </span>
                       </li>
-                      <li>2024</li>
+                      <li>{item.movie_year}</li>
                       <li className="border-[1px] border-dark py-[0.5px] px-1.5 text-[9px]">
                         HD
                       </li>
@@ -106,8 +124,8 @@ const ModalViewMovie = () => {
                       <Plus />
                     </button>
                   </div>
-                  <p className="text-xs text-balance leading-relaxed">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  <p className="text-xs text-balance leading-relaxed line-clamp-3">
+                    {item.movie_summary}
                   </p>
                 </div>
               </div>

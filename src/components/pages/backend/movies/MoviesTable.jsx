@@ -11,25 +11,34 @@ import LoadMore from "../partials/LoadMore";
 import Pills from "../partials/Pills";
 import TableLoader from "../partials/TableLoader";
 import { StoreContext } from "@/components/store/storeContext";
-import { setIsArchive, setIsConfirm, setIsDelete, setIsRestore, setIsView } from "@/components/store/storeAction";
+import { setIsAdd, setIsArchive, setIsConfirm, setIsDelete, setIsRestore, setIsView } from "@/components/store/storeAction";
 import React from "react";
 import ModalDelete from "../partials/Modals/ModalDelete";
 import ModalConfirm from "../partials/Modals/ModalConfirm";
 import ModalViewMovie from "./ModalViewMovie";
+import ModalAddMovie from "./ModalAddMovie";
+import { movies } from "./datamovies";
 
 const MoviesTable = () => {
   const{store,dispatch} = React.useContext(StoreContext);
+  let counter = 1;
+  const [movieInfo,setMovieInfo] = React.useState("");
+
   const handleDelete = () => {
-    dispatch(setIsDelete(true))
+    dispatch(setIsDelete(true));
+  };
+  const handleEdit = () => {
+    dispatch(setIsAdd(true));
   };
   const handleRestore = () => {
-    dispatch(setIsRestore(true))
+    dispatch(setIsRestore(true));
   };
   const handleArchive = () => {
-    dispatch(setIsArchive(true))
+    dispatch(setIsArchive(true));
   };
-  const handleView = () => {
-    dispatch(setIsView(true))
+  const handleView = (item) => {
+    dispatch(setIsView(true));
+    setMovieInfo(item);
   };
   return (
     <>
@@ -59,30 +68,35 @@ const MoviesTable = () => {
                 <IconServerError />
               </td>
             </tr> */}
-              {Array.from(Array(10).keys()).map((i) => (
-                <tr key={i}>
-                  <td>{i + 1}.</td>
+
+              {movies.map((item, key) => (
+                <tr key={key}>
+                  <td>{counter++}.</td>
                   <td>
                     <Pills />
                   </td>
-                  <td>Arcane</td>
-                  <td>2024</td>
-                  <td>2 Seasons</td>
+                  <td>{item.movie_title}</td>
+                  <td>{item.movie_year}</td>
+                  <td>{item.movie_duration}</td>
                   <td>
                     <ul className="table-action">
-                      {true ? (
+                      {item.movie_is_active ? (
                         <>
                           <li>
                             <button
                               className="tooltip"
                               data-tooltip="View"
-                              onClick={handleView}
+                              onClick={() => handleView(item)}
                             >
                               <FileVideo />
                             </button>
                           </li>
                           <li>
-                            <button className="tooltip" data-tooltip="Edit">
+                            <button
+                              className="tooltip"
+                              data-tooltip="Edit"
+                              onClick={() => handleEdit()}
+                            >
                               <FilePenLine />
                             </button>
                           </li>
@@ -128,7 +142,8 @@ const MoviesTable = () => {
       {store.isDelete && <ModalDelete />}
       {store.isRestore && <ModalConfirm />}
       {store.isArchive && <ModalConfirm />}
-      {store.isView && <ModalViewMovie />}
+      {store.isView && <ModalViewMovie movieInfo={movieInfo} />}
+      {store.isAdd && <ModalAddMovie />}
     </>
   );
 };
